@@ -5,6 +5,7 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
 import { supabase } from '../lib/supabase';
+import { motion } from "framer-motion"; // already imported
 
 const getTrophyIcon = (position: number) => {
   switch (position) {
@@ -76,6 +77,18 @@ const TopPerformerCard = ({ name, profit, trades, percentage, position }: {
     </div>
   );
 };
+
+// New FloatingLogo component animating favicon.png
+const FloatingLogo = () => (
+  <motion.div
+    initial={{ y: 0 }}
+    animate={{ y: [-20, 20, -20] }}
+    transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+    className="absolute top-[-100px] left-1/2 transform -translate-x-1/2"
+  >
+    <Image src="/favicon.png" alt="Favicon Animation" width={80} height={80} />
+  </motion.div>
+);
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -181,47 +194,80 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0C10] text-white">
+    <motion.div
+      initial={{ filter: "brightness(0%)" }}
+      animate={{ filter: "brightness(100%)" }}
+      transition={{ duration: 3 }}
+      className="min-h-screen bg-[#0A0C10] text-white relative"
+    >
       <Navbar />
 
-      {/* Hero Section */}
+      {/* Hero Section Overhaul with Responsive Design */}
       <main className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-16 relative">
-          {/* Background gradient effect */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/10 blur-3xl" />
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="relative p-8 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/10 rounded-xl flex flex-col md:flex-row items-center"
+        >
+          {/* Left: Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+            className="w-full md:w-1/3 text-left mb-6 md:mb-0 pr-4"
+          >
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">
+              Master{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-cyan-200 bg-clip-text text-transparent">
+                The Markets Together
+              </span>
+            </h1>
+            <p className="text-gray-400 text-base md:text-lg">
+              Join India's most Bakloli bhra forex trading group and prove your trading prowess. Compete with the best, learn from experts, and win big!!
+            </p>
+          </motion.div>
+
+          {/* Middle: Floating Image */}
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="w-full md:w-1/3 flex justify-center mb-6 md:mb-0"
+          >
+            <Image 
+              src="/favicon.png" 
+              alt="Hero Image" 
+              width={200} 
+              height={200} 
+              className="rounded-full  shadow-2xl" 
+            />
+          </motion.div>
           
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Master{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-cyan-200 bg-clip-text text-transparent">
-              The Markets Together
-            </span>
-          </h1>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 relative z-10">
-            Join India's most Bakloli bhra forex trading group and prove your trading prowess. 
-            Compete with the best, learn from experts, and win big!!
-          </p>
-          <div className="flex gap-4 justify-center relative z-10">
+          {/* Right: Buttons Container */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="w-full md:w-1/3 flex flex-col justify-center pl-4 gap-4"
+          >
             <a 
               href="https://discord.gg/aK4JqTvj5k"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-400 hover:to-cyan-500 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300"
+              className="bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-400 hover:to-cyan-500 text-black font-semibold px-4 py-2 rounded-full transition-all duration-300 shadow-lg text-s w-[200px] text-center mx-auto "
             >
               Join Competition
             </a>
             <Link 
               href="/leaderboard"
-              className="border border-gray-700 hover:border-cyan-500 px-6 py-3 rounded-lg transition-colors bg-[#0A0C10]/50 backdrop-blur-sm"
-              aria-label="View Leaderboard"
-              tabIndex={0}
+              className="bg-white text-black font-semibold px-4 py-2 rounded-full transition-all duration-300 shadow-lg text-center text-s    w-[200px] text-center mx-auto"
             >
               View Rankings
             </Link>
-          </div>
-        </div>
-
+          </motion.div>
+        </motion.div>
+        
         {/* Top Performers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
           {isLoading ? (
@@ -279,7 +325,7 @@ export default function Home() {
                   ))}
                   {recentBreaches.length === 0 && (
                     <div className="text-gray-400 text-center">No recent eliminations</div>
-                  )}
+                  )} 
                 </div>
               </div>
 
@@ -301,6 +347,6 @@ export default function Home() {
           )}
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }
