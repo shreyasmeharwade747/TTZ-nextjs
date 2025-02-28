@@ -91,13 +91,13 @@ const FloatingLogo = () => {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      // Reduced movement multiplier from 0.05 to 0.02 for more subtle movement
-      const x = ((e.clientX - centerX) / window.innerWidth) * 25;
-      const y = ((e.clientY - centerY) / window.innerHeight) * 25;
+      // Increased movement multiplier from 25 to 35 for more movement
+      const x = ((e.clientX - centerX) / window.innerWidth) * 35;
+      const y = ((e.clientY - centerY) / window.innerHeight) * 35;
 
-      // Tighter limits for movement range
-      const limitedX = Math.max(-20, Math.min(20, x));
-      const limitedY = Math.max(-20, Math.min(20, y));
+      // Adjusted limits for wider movement range
+      const limitedX = Math.max(-25, Math.min(25, x));
+      const limitedY = Math.max(-25, Math.min(25, y));
 
       setMousePosition({ x: limitedX, y: limitedY });
     };
@@ -116,9 +116,9 @@ const FloatingLogo = () => {
         }}
         transition={{
           type: "spring",
-          stiffness: 50, // Reduced stiffness for smoother movement
-          damping: 20,
-          mass: 0.5
+          stiffness: 70, // Increased stiffness for more responsive movement
+          damping: 15, // Reduced damping for more bounce
+          mass: 0.4 // Reduced mass for faster movement
         }}
         className="absolute"
       >
