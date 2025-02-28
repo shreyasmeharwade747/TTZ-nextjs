@@ -79,16 +79,60 @@ const TopPerformerCard = ({ name, profit, trades, percentage, position }: {
 };
 
 // New FloatingLogo component animating favicon.png
-const FloatingLogo = () => (
-  <motion.div
-    initial={{ y: 0 }}
-    animate={{ y: [-20, 20, -20] }}
-    transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-    className="absolute top-[-100px] left-1/2 transform -translate-x-1/2"
-  >
-    <Image src="/favicon.png" alt="Favicon Animation" width={80} height={80} />
-  </motion.div>
-);
+const FloatingLogo = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const container = document.getElementById('logo-container');
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Reduced movement multiplier from 0.05 to 0.02 for more subtle movement
+      const x = ((e.clientX - centerX) / window.innerWidth) * 25;
+      const y = ((e.clientY - centerY) / window.innerHeight) * 25;
+
+      // Tighter limits for movement range
+      const limitedX = Math.max(-20, Math.min(20, x));
+      const limitedY = Math.max(-20, Math.min(20, y));
+
+      setMousePosition({ x: limitedX, y: limitedY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  return (
+    <div id="logo-container" className="relative w-[300px] h-[300px] mx-auto flex items-center justify-center">
+      <motion.div
+        initial={{ x: 0, y: 0 }}
+        animate={{
+          x: mousePosition.x,
+          y: mousePosition.y
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 50, // Reduced stiffness for smoother movement
+          damping: 20,
+          mass: 0.5
+        }}
+        className="absolute"
+      >
+        <Image 
+          src="/favicon.png" 
+          alt="Floating Logo" 
+          width={200}
+          height={200}
+          className="rounded-full shadow-2xl"
+        />
+      </motion.div>
+    </div>
+  );
+};
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -235,13 +279,7 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.8 }}
             className="w-full md:w-1/3 flex justify-center mb-6 md:mb-0"
           >
-            <Image 
-              src="/favicon.png" 
-              alt="Hero Image" 
-              width={200} 
-              height={200} 
-              className="rounded-full  shadow-2xl" 
-            />
+            <FloatingLogo />
           </motion.div>
           
           {/* Right: Buttons Container */}
