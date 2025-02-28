@@ -295,7 +295,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-400 hover:to-cyan-500 text-black font-semibold px-4 py-2 rounded-full transition-all duration-300 shadow-lg text-s w-[200px] text-center mx-auto "
             >
-              Join Competition
+              Join Discord
             </a>
             <Link 
               href="/leaderboard"
