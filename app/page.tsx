@@ -118,7 +118,7 @@ const FloatingLogo = () => {
           type: "spring",
           stiffness: 70, // Increased stiffness for more responsive movement
           damping: 15, // Reduced damping for more bounce
-          mass: 0.4 // Reduced mass for faster movement
+          mass: 0.3 // Reduced mass for faster movement
         }}
         className="absolute"
       >
