@@ -20,6 +20,7 @@ interface TraderStats {
   winningTrades: number;
   losingTrades: number;
   averageLotSize: number;
+  lotsTraded: number;  // Add this line
   mostTradedSymbol: string;
 }
 
@@ -142,8 +143,8 @@ export default function TraderDetailsDialog({ isOpen, onClose, trader }: TraderD
               <div className="text-lg sm:text-xl font-bold text-red-500 group-hover:text-red-500 transition-colors">{trader.statistics.losingTrades}</div>
             </div>
             <div className="bg-black/20 p-4 rounded-xl border border-gray-800/50 hover:border-cyan-500/30 transition-all duration-300 group">
-              <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">AVG LOT SIZE</div>
-              <div className="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">{trader.statistics.averageLotSize}</div>
+              <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">LOTS TRADED</div>
+              <div className="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">{trader.statistics.lotsTraded}</div>
             </div>
             <div className="bg-black/20 p-4 rounded-xl border border-gray-800/50 hover:border-cyan-500/30 transition-all duration-300 group">
               <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">MOST TRADED SYMBOL</div>

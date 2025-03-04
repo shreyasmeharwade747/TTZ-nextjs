@@ -178,7 +178,7 @@ export default function LeaderboardPage() {
         winRate: `${trader.win_rate || 0}%`,
         winningTrades: trader.winning_trades || 0,
         losingTrades: trader.losing_trades || 0,
-        averageLotSize: trader.average_lots || 0,
+        lotsTraded: trader.lots_traded || 0,  // Change this line
         mostTradedSymbol: trader.most_traded_symbol || "",
         breached: trader.breached || false
       },
@@ -201,6 +201,7 @@ export default function LeaderboardPage() {
   // Calculate highest return and active competitors
   const highestReturn = Math.max(...liveAccounts.map(trader => trader.return), 0).toFixed(2);
   const activeCompetitors = liveAccounts.length;
+  const totalCompetitors = traders.length;
 
   const profitColor = (profit: number) => (profit < 0 ? 'text-red-500' : 'text-green-500');
   const returnColor = (returnValue: number) => (returnValue < 0 ? 'text-red-500' : 'text-green-500');
@@ -242,13 +243,13 @@ export default function LeaderboardPage() {
                 </div>
                 
                 <div className="bg-[#0D1117] p-6 rounded-lg border border-gray-800 hover:border-cyan-500/50 transition-all duration-300">
-                  <div className="text-3xl font-bold text-cyan-400">{activeCompetitors}</div>
+                  <div className="text-3xl font-bold text-cyan-400">{activeCompetitors}/{totalCompetitors}</div>
                   <div className="text-gray-400 text-sm mt-1">Active Competitors</div>
                 </div>
                 
                 <div className="bg-[#0D1117] p-6 rounded-lg border border-gray-800 hover:border-cyan-500/50 transition-all duration-300">
-                  <div className="text-xl text-cyan-400" aria-label="Last updated time">{formatTimeAgo(metadata?.last_updated_time)}</div>
-                  <div className="text-gray-400 text-sm mt-1">Last Updated</div>
+                  <div className="text-xl font0-bold text-cyan-400" aria-label="Last updated time">{formatTimeAgo(metadata?.last_updated_time)}</div>
+                  <div className="text-gray-400 text-sm mt-2">Last Updated</div>
                 </div>
               </>
             )}
