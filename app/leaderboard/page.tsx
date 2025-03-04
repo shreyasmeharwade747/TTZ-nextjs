@@ -297,13 +297,15 @@ export default function LeaderboardPage() {
                           )}
                         </td>
                         <td className="p-4 font-medium">${(trader.balance || 0).toFixed(2)}</td>
-                         <td className="p-4 font-medium flex items-center gap-2">
-                          ${(trader.equity || 0).toFixed(2)}
-                          {trader.open_positions > 0 && (
-                            <span className="px-1.5 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-400 font-medium">
-                              {trader.open_positions}
-                            </span>
-                          )}
+                         <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">${(trader.equity || 0).toFixed(2)}</span>
+                            {trader.open_positions > 0 && (
+                              <span className="px-1.5 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-400 font-medium">
+                                {trader.open_positions}
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className={`p-4 ${profitColor(trader.profit_loss)}`}>${(trader.profit_loss || 0).toFixed(2)}</td>
                         <td className={`p-4 ${returnColor(trader.return)}`}>{(trader.return || 0).toFixed(2)}%</td>
