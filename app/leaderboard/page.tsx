@@ -165,7 +165,8 @@ export default function LeaderboardPage() {
         breached: trader.breached || false
       },
       startingDayBalance: trader.starting_day_balance || 0,
-      dailyDdLimit: trader.daily_dd_limit || 95000
+      dailyDdLimit: trader.daily_dd_limit || 95000,
+      openPositions: trader.open_positions || 0  // Add this line
     });
   };
 
@@ -277,7 +278,14 @@ export default function LeaderboardPage() {
                           )}
                         </td>
                         <td className="p-4 font-medium">${(trader.balance || 0).toFixed(2)}</td>
-                        <td className="p-4 font-medium">${(trader.equity || 0).toFixed(2)}</td>
+                         <td className="p-4 font-medium flex items-center gap-2">
+                          ${(trader.equity || 0).toFixed(2)}
+                          {trader.open_positions > 0 && (
+                            <span className="px-1.5 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-400 font-medium">
+                              {trader.open_positions}
+                            </span>
+                          )}
+                        </td>
                         <td className={`p-4 ${profitColor(trader.profit_loss)}`}>${(trader.profit_loss || 0).toFixed(2)}</td>
                         <td className={`p-4 ${returnColor(trader.return)}`}>{(trader.return || 0).toFixed(2)}%</td>
                         <td className="p-4">
@@ -314,9 +322,16 @@ export default function LeaderboardPage() {
                         <span className="text-gray-400">Balance</span>
                         <span className="font-medium">${(trader.balance || 0).toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-gray-400">Equity</span>
-                        <span className="font-medium">${(trader.equity || 0).toFixed(2)}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">${(trader.equity || 0).toFixed(2)}</span>
+                          {trader.open_positions > 0 && (
+                            <span className="px-1.5 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-400 font-medium">
+                              {trader.open_positions}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Profit/Loss</span>
