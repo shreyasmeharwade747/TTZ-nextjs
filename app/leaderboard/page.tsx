@@ -93,23 +93,26 @@ export default function LeaderboardPage() {
       try {
         setIsLoading(true);
         
-        // Fetch data from Supabase
-        const { data: tradersData, error } = await supabase
+        // Fetch traders data
+        const { data: tradersData, error: tradersError } = await supabase
           .from('leaderboard')
           .select('*')
           .order('return', { ascending: false });
 
-        if (error) throw error;
+        if (tradersError) throw tradersError;
 
-        // Get the latest update time
-        const latestUpdateTime = tradersData?.reduce((latest: string, trader: any) => {
-          return trader.last_update_time > latest ? trader.last_update_time : latest;
-        }, tradersData[0]?.last_update_time || new Date().toISOString());
+        // Fetch metadata
+        const { data: metadataData, error: metadataError } = await supabase
+          .from('metadata')
+          .select('*')
+          .single();
+
+        if (metadataError) throw metadataError;
 
         setTraders(tradersData || []);
-        setMetadata({ last_update_time: latestUpdateTime });
+        setMetadata(metadataData || {});
       } catch (error) {
-        console.error("Error fetching traders data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -117,8 +120,8 @@ export default function LeaderboardPage() {
 
     fetchTradersData();
 
-    // Set up real-time subscription
-    const subscription = supabase
+    // Set up real-time subscription for both tables
+    const leaderboardSubscription = supabase
       .channel('leaderboard-changes')
       .on('postgres_changes', 
         { 
@@ -132,8 +135,23 @@ export default function LeaderboardPage() {
       )
       .subscribe();
 
+    const metadataSubscription = supabase
+      .channel('metadata-changes')
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'metadata'
+        },
+        () => {
+          fetchTradersData();
+        }
+      )
+      .subscribe();
+
     return () => {
-      subscription.unsubscribe();
+      leaderboardSubscription.unsubscribe();
+      metadataSubscription.unsubscribe();
     };
   }, []);
 
@@ -229,7 +247,7 @@ export default function LeaderboardPage() {
                 </div>
                 
                 <div className="bg-[#0D1117] p-6 rounded-lg border border-gray-800 hover:border-cyan-500/50 transition-all duration-300">
-                  <div className="text-xl text-cyan-400" aria-label="Last updated time">{formatTimeAgo(metadata?.last_update_time)}</div>
+                  <div className="text-xl text-cyan-400" aria-label="Last updated time">{formatTimeAgo(metadata?.last_updated_time)}</div>
                   <div className="text-gray-400 text-sm mt-1">Last Updated</div>
                 </div>
               </>
