@@ -268,7 +268,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-gray-400 text-base md:text-lg">
-            From aspiring traders to funded professionals—your journey starts here. Join a dynamic community where you can learn advanced strategies, compete in real-market challenges, and gain the skills needed to secure funding.
+            From aspiring traders to funded professionals your journey starts here. Join a dynamic community where you can learn advanced strategies, compete in real-market challenges, and gain the skills needed to secure funding.
             </p>
           </motion.div>
 
