@@ -344,15 +344,15 @@ export default function LeaderboardPage() {
                         <span className="font-medium">${(trader.balance || 0).toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-400">Equity</span>
                         <div className="flex items-center gap-2">
-                          <span className="font-medium">${(trader.equity || 0).toFixed(2)}</span>
+                          <span className="text-gray-400">Equity</span>
                           {trader.open_positions > 0 && (
                             <span className="px-1.5 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-400 font-medium">
                               {trader.open_positions}
                             </span>
                           )}
                         </div>
+                        <span className="font-medium">${(trader.equity || 0).toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Profit/Loss</span>
