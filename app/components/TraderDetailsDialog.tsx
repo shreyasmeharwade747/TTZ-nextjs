@@ -105,7 +105,7 @@ export default function TraderDetailsDialog({ isOpen, onClose, trader }: TraderD
               <div className="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">${trader.dailyDdLimit}</div>
             </div>
             <div className="bg-black/20 p-4 rounded-xl border border-gray-800/50 hover:border-cyan-500/30 transition-all duration-300 group">
-              <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">ACCOUNT LOSS LIMIT</div>
+              <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">MAX LOSS LIMIT</div>
               <div className="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">$95,000</div>
             </div>
             <div className="bg-black/20 p-4 rounded-xl border border-gray-800/50 hover:border-cyan-500/30 transition-all duration-300 group w-full">

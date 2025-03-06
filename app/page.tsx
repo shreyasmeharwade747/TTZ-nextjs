@@ -214,27 +214,6 @@ export default function Home() {
     };
 
     fetchData();
-
-    // Set up real-time subscription
-    const subscription = supabase
-      .channel('home-changes')
-      .on('postgres_changes', 
-        { 
-          event: '*', 
-          schema: 'public', 
-          table: 'leaderboard' 
-        }, 
-        () => {
-          // Refresh data when changes occur
-          fetchData();
-        }
-      )
-      .subscribe();
-
-    // Cleanup subscription
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   return (

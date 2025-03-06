@@ -119,40 +119,6 @@ export default function LeaderboardPage() {
     };
 
     fetchTradersData();
-
-    // Set up real-time subscription for both tables
-    const leaderboardSubscription = supabase
-      .channel('leaderboard-changes')
-      .on('postgres_changes', 
-        { 
-          event: '*', 
-          schema: 'public', 
-          table: 'leaderboard' 
-        }, 
-        () => {
-          fetchTradersData();
-        }
-      )
-      .subscribe();
-
-    const metadataSubscription = supabase
-      .channel('metadata-changes')
-      .on('postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'metadata'
-        },
-        () => {
-          fetchTradersData();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      leaderboardSubscription.unsubscribe();
-      metadataSubscription.unsubscribe();
-    };
   }, []);
 
   const handleOpenDetails = (trader: any) => {
