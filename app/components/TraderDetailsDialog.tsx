@@ -22,6 +22,7 @@ interface TraderStats {
   averageLotSize: number;
   lotsTraded: number;  // Add this line
   mostTradedSymbol: string;
+  consistencyScore: number;
 }
 
 interface TraderDetailsProps {
@@ -149,6 +150,10 @@ export default function TraderDetailsDialog({ isOpen, onClose, trader }: TraderD
             <div className="bg-black/20 p-4 rounded-xl border border-gray-800/50 hover:border-cyan-500/30 transition-all duration-300 group">
               <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">MOST TRADED SYMBOL</div>
               <div className="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">{trader.statistics.mostTradedSymbol || "N/A"}</div>
+            </div>
+            <div className="bg-black/20 p-4 rounded-xl border border-gray-800/50 hover:border-cyan-500/30 transition-all duration-300 group">
+              <div className="text-gray-400 text-sm mb-1 group-hover:text-gray-300 transition-colors">CONSISTENCY SCORE</div>
+              <div className="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">{trader.statistics.consistencyScore || 0}%</div>
             </div>
           </div>
         );

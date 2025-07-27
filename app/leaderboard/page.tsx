@@ -146,7 +146,8 @@ export default function LeaderboardPage() {
         losingTrades: trader.losing_trades || 0,
         lotsTraded: trader.lots_traded || 0,  // Change this line
         mostTradedSymbol: trader.most_traded_symbol || "",
-        breached: trader.breached || false
+        breached: trader.breached || false,
+        consistencyScore: trader.consistency_score || 0
       },
       startingDayBalance: trader.starting_day_balance || 0,
       dailyDdLimit: trader.daily_dd_limit || 95000,
