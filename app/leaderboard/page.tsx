@@ -194,7 +194,7 @@ export default function LeaderboardPage() {
     }
     const reason: string | undefined = trader?.manual_breach_reason;
     if (reason && reason.trim().length > 0) {
-      return { text: reason, class: 'text-red-500', aria: 'Manual breach reason' };
+      return { text: reason, class: 'text-gray-400', aria: 'Manual breach reason' };
     }
     return null;
   };
