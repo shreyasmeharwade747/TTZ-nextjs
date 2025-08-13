@@ -123,7 +123,7 @@ const FloatingLogo = () => {
         className="absolute"
       >
         <Image 
-          src="/favicon.png" 
+          src="/favicon.webp" 
           alt="Floating Logo" 
           width={200}
           height={200}

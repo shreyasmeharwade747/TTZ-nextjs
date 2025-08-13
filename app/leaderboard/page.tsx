@@ -31,6 +31,7 @@ interface Breach {
   };
 }
 
+
 const SkeletonRow = () => (
   <tr className="border-b border-gray-800">
     <td className="p-4">
@@ -156,22 +157,47 @@ export default function LeaderboardPage() {
   };
 
   // Separate live and breached accounts
-  const liveAccounts = traders.filter(trader => !trader.breached);
-  const breachedAccounts = traders.filter(trader => trader.breached);
+  const liveAccounts = traders.filter((trader: { breached: any; }) => !trader.breached);
+  const breachedAccounts = traders.filter((trader: { breached: any; }) => trader.breached);
 
-  // Sort live accounts by highest return
-  const sortedLiveAccounts = liveAccounts.sort((a, b) => b.return - a.return);
+  // Sort live accounts by highest return (safe copy with null checks)
+  const sortedLiveAccounts = [...liveAccounts].sort((a, b) => {
+    const aReturn = a.return || 0;
+    const bReturn = b.return || 0;
+    return bReturn - aReturn;
+  });
 
   // Combine sorted live accounts with breached accounts
   const sortedTraders = [...sortedLiveAccounts, ...breachedAccounts];
 
-  // Calculate highest return and active competitors
-  const highestReturn = Math.max(...liveAccounts.map(trader => trader.return), 0).toFixed(2);
+  // Calculate highest return and active competitors (safe for empty arrays)
+  const highestReturn = liveAccounts.length > 0 
+    ? Math.max(...liveAccounts.map((trader: { return: any; }) => trader.return || 0)).toFixed(2)
+    : '0.00';
   const activeCompetitors = liveAccounts.length;
   const totalCompetitors = traders.length;
 
   const profitColor = (profit: number) => (profit < 0 ? 'text-red-500' : 'text-green-500');
   const returnColor = (returnValue: number) => (returnValue < 0 ? 'text-red-500' : 'text-green-500');
+  
+  // Helper to determine breach info with fallback to manual_breach_reason
+  const getBreachInfo = (trader: any): { text: string; class: string; aria: string } | null => {
+    if (!trader?.breached) return null;
+    const breachesArr = Array.isArray(trader?.breaches) ? trader.breaches : [];
+    if (breachesArr.length > 0) {
+      const isDaily = breachesArr.some((breach: Breach) => breach.type === 'daily_drawdown');
+      return {
+        text: isDaily ? 'Daily Drawdown Breach' : 'Max Drawdown Breach',
+        class: isDaily ? 'text-red-500' : 'text-yellow-500',
+        aria: isDaily ? 'Daily drawdown breach' : 'Max drawdown breach',
+      };
+    }
+    const reason: string | undefined = trader?.manual_breach_reason;
+    if (reason && reason.trim().length > 0) {
+      return { text: reason, class: 'text-red-500', aria: 'Manual breach reason' };
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0C10] text-white">
@@ -254,14 +280,14 @@ export default function LeaderboardPage() {
                         </td>
                         <td className="p-4 font-medium">
                           {trader.contestant_name}
-                          {trader.breached && trader.breaches && (
-                            <div 
-                              className={`text-sm mt-1 ${trader.breaches.some((breach: Breach) => breach.type === 'daily_drawdown') ? 'text-red-500' : 'text-yellow-500'}`}
-                              aria-label={trader.breaches.some((breach: Breach) => breach.type === 'daily_drawdown') ? 'Daily drawdown breach' : 'Max drawdown breach'}
-                            >
-                              {trader.breaches.some((breach: Breach) => breach.type === 'daily_drawdown') ? 'Daily Drawdown Breach' : 'Max Drawdown Breach'}
-                            </div>
-                          )}
+                          {(() => {
+                            const info = getBreachInfo(trader);
+                            return info ? (
+                              <div className={`text-sm mt-1 ${info.class}`} aria-label={info.aria}>
+                                {info.text}
+                              </div>
+                            ) : null;
+                          })()}
                         </td>
                         <td className="p-4 font-medium">${(trader.balance || 0).toFixed(2)}</td>
                          <td className="p-4">
@@ -329,14 +355,15 @@ export default function LeaderboardPage() {
                         <span className="text-gray-400">Return</span>
                         <span className={`font-medium ${returnColor(trader.return)}`}>{(trader.return || 0).toFixed(2)}%</span>
                       </div>
-                      {trader.breached && trader.breaches.length > 0 && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Breach Type</span>
-                            <span className={`font-medium ${trader.breaches.some((breach: Breach) => breach.type === 'daily_drawdown') ? 'text-red-500' : 'text-yellow-500'}`}>
-                            {trader.breaches.some((breach: Breach) => breach.type === 'daily_drawdown') ? 'Daily Drawdown Breach' : 'Max Drawdown Breach'}
-                            </span>
-                        </div>
-                      )}
+                      {trader.breached && (() => {
+                        const info = getBreachInfo(trader);
+                        return info ? (
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Breach</span>
+                            <span className={`font-medium ${info.class}`}>{info.text}</span>
+                          </div>
+                        ) : null;
+                      })()}
                     </div>
                     <button 
                       onClick={() => handleOpenDetails(trader)}

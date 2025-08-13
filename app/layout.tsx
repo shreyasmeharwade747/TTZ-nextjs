@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: 'The Trading Zone',
   description: 'Your app description.',
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon.webp',
   },  
 };
 
